@@ -1,5 +1,5 @@
 
-# Resampling Techniques - Lab
+# Resampling Methods - Lab
 
 ## Introduction
 
