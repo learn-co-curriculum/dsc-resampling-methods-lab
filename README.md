@@ -3,13 +3,13 @@
 
 ## Introduction
 
-Now that you have some preliminary background on bootstrapping, jacknife and permutation tests, its time to practice those skills by coding them into functions. You'll then apply these tests to a hypothesis test and compare the results to a parametric t-test.
+Now that you have some preliminary background on bootstrapping, jackknife and permutation tests, its time to practice those skills by coding them into functions. You'll then apply these tests to a hypothesis test and compare the results to a parametric t-test.
 
 ## Objectives
 
 You will be able to:
 * Understand permutation testing
-* Understand what jacknife is
+* Understand what jackknife is
 * Understand what bootstrapping is
 
 ## Bootstrapping
@@ -27,7 +27,7 @@ def bootstrap(sample, n):
     return np.random.choice(sample, size=len(sample), replace=True)
 ```
 
-## Jacknife 
+## Jackknife 
 
 Write a function that creates additional samples by removing one element at a time. The function should do this for each of the n items in the original sample, returning n samples, each with n-1 members.
 
@@ -101,7 +101,7 @@ def permT(a,b):
 ```
 
 ## Permutation Testing in Practice
-Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% signifincance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `permT()` function, defined above, to generate all the possible combinations of the entrie sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
+Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `permT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
 
 For example, in our small handwritten example above:
 
@@ -178,7 +178,7 @@ print('P-value: {}'.format(p_val))
 
 ## T-test Revisited
 
-The parameteric statistical test equivalent to our permutation test above would be a t-test of the two groups. Perform a t-test on the same data above in order to calculate the p-value. How does this compare to the above results?
+The parametric statistical test equivalent to our permutation test above would be a t-test of the two groups. Perform a t-test on the same data above in order to calculate the p-value. How does this compare to the above results?
 
 
 ```python
@@ -201,7 +201,7 @@ print(pval)
 
 ## Bootstrap Applied
 
-Use your code above to apply the bootstrap technique to this hypothesis testing scenario. In other words, similar to the permutation testing you performed above, compute additional samples (arbitrarily let's say 10,000) of the same size as the original sample, with replacement. For each of these additional samples, compute whether the difference in sample means is the same or greater then that of the original samples. Use this to calculate an overall p-value for the null hypothesis.
+Use your code above to apply the bootstrap technique to this hypothesis testing scenario. In other words, similar to the permutation testing you performed above, compute additional samples (arbitrarily let's say 1000) of the same size as the original sample, with replacement. For each of these additional samples, compute whether the difference in sample means is the same or greater then that of the original samples. Use this to calculate an overall p-value for the null hypothesis.
 
 
 ```python
