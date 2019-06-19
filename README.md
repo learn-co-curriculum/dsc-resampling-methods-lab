@@ -47,11 +47,13 @@ def jack1(sample):
 
 Define a function that generate all possible, equally sized, two set splits of two sets A and B. Sets A and B need not be the same size, but all of the generate two set splits should be of equal size. For example, if we had a set with 5 members and a set with 7 members, the function would return all possible 5-7 ordered splits of the 12 items. 
 
+> Note that these are actually combinations! However, as noted previously, permutation tests really investigate possible regroupings of the data observations, so calculating combinations is a more efficient approach!
+
 
 Here's a more in depth example:  
 ```A = [1,2,2]
 B = [1,3]
-permT(A, B) = [
+combT(A, B) = [
                 ([1,2,2], [1,3]),
                 ([1,2,3], [1,2]),
                 ([1,2,1], [2,3])
@@ -67,28 +69,7 @@ import itertools
 
 
 ```python
-a = [1,2,2]
-b = [1,3]
-union = a + b
-new_as = list(set(itertools.combinations(union, len(a))))
-new_bs = []
-for new_a in new_as:
-    #Copy whole set
-    u_copy = union.copy()
-    #Iterate through particular combo
-    for a in new_a:
-        #Remove elements from union to find compliment
-        try:
-            u_copy.remove(a)
-        except:
-            print(u_copy, a)
-    #Append compliment to list
-    new_bs.append(u_copy)
-```
-
-
-```python
-def permT(a,b):
+def combT(a,b):
     union = a + b
     new_as = list(itertools.combinations(union, len(a)))
     new_bs = []
@@ -101,7 +82,7 @@ def permT(a,b):
 ```
 
 ## Permutation Testing in Practice
-Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `permT()` function, defined above, to generate all the possible permutations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these permutations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
+Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `permT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
 
 For example, in our small handwritten example above:
 
@@ -113,7 +94,7 @@ Giving us
 
 $\mu_a - \mu_b = \frac{5}{3} - 2 = \frac{1}{2}$
 
-In comparison, for our various permutations we have:
+In comparison, for our various combinations we have:
 
 ([1,2,2], [1,3]):  $\mu_a - \mu_b = \frac{5}{3} - 2 = \frac{1}{2}$  
 ([1,2,3], [1,2]):  $\mu_a - \mu_b = 2 - \frac{3}{2} = \frac{1}{2}$  
@@ -126,7 +107,7 @@ A standard hypothesis test for this scenario might be:
 $h_0: \mu_a = \mu_b$  
 $h_1: \mu_a < \mu_b$  
   
-Thus comparing our sample difference to the differences of our possible permutations, we look at the number of experiments from our permutation space that were the same or greater then our sample statistic, divided by the total number of permutations. In this case, 4 out of 5 of the permutation cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
+Thus comparing our sample difference to the differences of our possible permutations, we look at the number of experiments from our combinations space that were the same or greater then our sample statistic, divided by the total number of permutations. In this case, 4 out of 5 of the permutation cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
 
 
 ```python
@@ -159,7 +140,7 @@ print(comb(n_items, sample_size))
 ```python
 # Your code here
 diff_mu_a_b = np.mean(a) - np.mean(b)
-combos = permT(a, b)
+combos = combT(a, b)
 print("There are {} possible sample variations.".format(len(combos)))
 num = 0 #Initialize numerator
 for ai, bi in combos:
@@ -217,7 +198,7 @@ p_val = num / iterations
 print('P-value: {}'.format(p_val))
 ```
 
-    P-value: 0.4973
+    P-value: 0.4935
 
 
 ## Summary
