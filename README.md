@@ -42,25 +42,27 @@ Define a function that generate all possible, equally sized, two set splits of t
 
 
 Here's a more in depth example:  
-```A = [1,2,2]
-B = [1,3]
-combT(A, B) = [
-                ([1,2,2], [1,3]),
-                ([1,2,3], [1,2]),
-                ([1,2,1], [2,3])
-                ([1,1,3], [2,2]),
-                ([2,2,3], [1,1])
-              ]```  
+```python
+>>> A = [1,2,2]
+>>> B = [1,3]
+>>> combT(A, B) 
+[([1,2,2], [1,3]),
+ ([1,2,3], [1,2]),
+ ([1,2,1], [2,3]),
+ ([1,1,3], [2,2]),
+ ([2,2,3], [1,1])]
+               
+```  
 These are all the possible 3-2 member splits of the 5 elements : 1,1,2,2,3.
 
 
 ```python
-def permT(a,b):
+def comb(a,b):
     # Your code here
 ```
 
 ## Permutation Testing in Practice
-Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `permT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
+Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `combT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
 
 For example, in our small handwritten example above:
 
@@ -85,7 +87,7 @@ A standard hypothesis test for this scenario might be:
 $h_0: \mu_a = \mu_b$  
 $h_1: \mu_a < \mu_b$  
   
-Thus comparing our sample difference to the differences of our possible permutations, we look at the number of experiments from our combinations space that were the same or greater then our sample statistic, divided by the total number of permutations. In this case, 4 out of 5 of the permutation cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
+Thus comparing our sample difference to the differences of our possible combinations, we look at the number of experiments from our combinations space that were the same or greater then our sample statistic, divided by the total number of combinations. In this case, 4 out of 5 of the combination cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
 
 
 ```python
