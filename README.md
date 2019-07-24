@@ -51,34 +51,32 @@ Define a function that generate all possible, equally sized, two set splits of t
 
 
 Here's a more in depth example:  
-```A = [1,2,2]
-B = [1,3]
-combT(A, B) = [
-                ([1,2,2], [1,3]),
-                ([1,2,3], [1,2]),
-                ([1,2,1], [2,3])
-                ([1,1,3], [2,2]),
-                ([2,2,3], [1,1])
-              ]```  
+```python
+>>> A = [1,2,2]
+>>> B = [1,3]
+>>> combT(A, B) 
+[([1,2,2], [1,3]),
+ ([1,2,3], [1,2]),
+ ([1,2,1], [2,3]),
+ ([1,1,3], [2,2]),
+ ([2,2,3], [1,1])]
+               
+```  
 These are all the possible 3-2 member splits of the 5 elements : 1,1,2,2,3.
 
 
 ```python
-import itertools
-```
+from itertools import combinations
 
-
-```python
-def combT(a,b):
-    union = a + b
-    new_as = list(itertools.combinations(union, len(a)))
-    new_bs = []
-    for new_a in new_as:
-        u_copy = union.copy()
-        for a in new_a:
-            u_copy.remove(a)
-        new_bs.append(u_copy)
-    return list(zip(new_as, new_bs))
+def combT(a, b):
+    union = sorted(a + b)
+    all_combs = []
+    for x in set(combinations(union, len(a))):
+        union_copy = union.copy()
+        for y in x:
+            union_copy.remove(y)
+        all_combs.append((list(x), list(combinations(union_copy, len(union) - len(a)))))
+    return all_combs
 ```
 
 ## Permutation Testing in Practice
@@ -198,7 +196,7 @@ p_val = num / iterations
 print('P-value: {}'.format(p_val))
 ```
 
-    P-value: 0.4935
+    P-value: 0.5034
 
 
 ## Summary
