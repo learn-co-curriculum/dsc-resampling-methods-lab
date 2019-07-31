@@ -22,6 +22,19 @@ def bootstrap():
     #Your code here
 ```
 
+
+```python
+# __SOLUTION__ 
+import numpy as np
+```
+
+
+```python
+# __SOLUTION__ 
+def bootstrap(sample, n):
+    return np.random.choice(sample, size=len(sample), replace=True)
+```
+
 ## Jackknife 
 
 Write a function that creates additional samples by removing one element at a time. The function should do this for each of the n items in the original sample, returning n samples, each with n-1 members.
@@ -32,6 +45,19 @@ def jack1():
     """This function should take in a list of n observations and return n lists
     each with one member (presumably the nth) removed."""
     # Your code here
+```
+
+
+```python
+# __SOLUTION__ 
+def jack1(sample):
+    """This function should take in a list of n observations and return n lists
+    each with one member (presumably the nth) removed."""
+    samples = []
+    for i in range(len(sample)):
+        new_sample = sample[:i] + sample[i+1:]
+        samples.append(new_sample)
+    return samples
 ```
 
 ## Permutation Testing
@@ -59,6 +85,22 @@ These are all the possible 3-2 member splits of the 5 elements : 1,1,2,2,3.
 ```python
 def comb(a,b):
     # Your code here
+```
+
+
+```python
+# __SOLUTION__ 
+from itertools import combinations
+
+def combT(a, b):
+    union = sorted(a + b)
+    all_combs = []
+    for x in set(combinations(union, len(a))):
+        union_copy = union.copy()
+        for y in x:
+            union_copy.remove(y)
+        all_combs.append((list(x), list(combinations(union_copy, len(union) - len(a)))))
+    return all_combs
 ```
 
 ## Permutation Testing in Practice
@@ -100,6 +142,55 @@ b = []
 # Your code here
 ```
 
+
+```python
+# __SOLUTION__ 
+a = [109.6927759 , 120.27296943, 103.54012038, 114.16555857,
+       122.93336175, 110.9271756 , 114.77443758, 116.34159338,
+       112.66413025, 118.30562665, 132.31196515, 117.99000948]
+b = [123.98967482, 141.11969004, 117.00293412, 121.6419775 ,
+       123.2703033 , 123.76944385, 105.95249634, 114.87114479,
+       130.6878082 , 140.60768727, 121.95433026, 123.11996767,
+       129.93260914, 121.01049611]
+```
+
+
+```python
+# __SOLUTION__ 
+# Your code here
+from scipy.special import comb
+n_items = len(a)+len(b)
+unique = len(set(a+b))
+sample_size = len(a)
+
+print(n_items, sample_size)
+print(comb(n_items, sample_size))
+```
+
+    26 12
+    9657700.0
+
+
+
+```python
+# __SOLUTION__ 
+# Your code here
+diff_mu_a_b = np.mean(a) - np.mean(b)
+combos = combT(a, b)
+print("There are {} possible sample variations.".format(len(combos)))
+num = 0 #Initialize numerator
+for ai, bi in combos:
+    diff_mu_ai_bi = np.mean(ai) - np.mean(bi)
+    if diff_mu_ai_bi >= diff_mu_a_b:
+        num +=1
+p_val = num / len(combos)
+print('P-value: {}'.format(p_val))
+```
+
+    There are 9657700 possible sample variations.
+    P-value: 0.9890762811021258
+
+
 ## T-test Revisited
 
 The parametric statistical test equivalent to our permutation test above would be a t-test of the two groups. Perform a t-test on the same data above in order to calculate the p-value. How does this compare to the above results?
@@ -109,6 +200,27 @@ The parametric statistical test equivalent to our permutation test above would b
 # Your code here
 ```
 
+
+```python
+# __SOLUTION__ 
+import scipy.stats as stats
+```
+
+
+```python
+# __SOLUTION__ 
+num = np.mean(a) - np.mean(b)
+s = np.var(a+b)
+n = len(a+b)
+denom = s/np.sqrt(n)
+t = num / denom
+pval = stats.t.sf(np.abs(t), n-1)*2
+print(pval)
+```
+
+    0.6196331755824978
+
+
 ## Bootstrap Applied
 
 Use your code above to apply the bootstrap technique to this hypothesis testing scenario. In other words, similar to the permutation testing you performed above, compute additional samples (arbitrarily let's say 1000) of the same size as the original sample, with replacement. For each of these additional samples, compute whether the difference in sample means is the same or greater then that of the original samples. Use this to calculate an overall p-value for the null hypothesis.
@@ -117,6 +229,26 @@ Use your code above to apply the bootstrap technique to this hypothesis testing 
 ```python
 # Your code here
 ```
+
+
+```python
+# __SOLUTION__ 
+# Your code here
+iterations = 10**4
+diff_mu_a_b = np.mean(a) - np.mean(b)
+num = 0 #Initialize numerator
+for n in range(iterations):
+    ai = bootstrap(a, len(a))
+    bi = bootstrap(b, len(b))
+    diff_mu_ai_bi = np.mean(ai) - np.mean(bi)
+    if diff_mu_ai_bi >= diff_mu_a_b:
+        num +=1
+p_val = num / iterations
+print('P-value: {}'.format(p_val))
+```
+
+    P-value: 0.5034
+
 
 ## Summary
 
