@@ -12,9 +12,27 @@ You will be able to:
 - Understand what jackknife is
 - Understand what bootstrapping is
 
-## Bootstrapping
+## Bootstrap Sampling
 
-Write a function that takes a sample and generates n additional samples of the same size using bootstrapping. (Recall that bootstrapping creates additional sets by sampling with replacement.)
+
+Bootstrap sampling works by combining two distinct samples into a universal set and generating random samples from this combined sample space in order to compare these random splits to the two original samples. The idea is to see if the difference between the two **original** samples is statistically significant. If similar differences can be observed through the random generation of samples, then the observed differences are not actually significant.
+
+
+Write a function to perform bootstrap sampling. The function should take in two samples A and B. The two samples need not be the same size. From this, create a universal sample by combining A and B. Then, create a resampled universal sample of the same size using random sampling with replacement. Finally, split this randomly generated universal set into two samples which are the same size as the original samples, A and B. The function should return these resampled samples.
+
+Ex:
+
+```python
+
+A = [1,2,3]
+B = [2,2,5,6]
+
+Universal_Set = [1,2,2,2,3,5,6]
+Resampled_Universal_Set = [6, 2, 3, 2, 1, 1, 2] #Could be different (randomly generated with replacement)
+
+Resampled_A = [6,2,3]
+Resampled_B = [2,1,1,2]
+```
 
 
 ```python
@@ -31,8 +49,12 @@ import numpy as np
 
 ```python
 # __SOLUTION__ 
-def bootstrap(sample, n):
-    return np.random.choice(sample, size=len(sample), replace=True)
+def bootstrap(A, B):
+    universe = list(A) + list(B)
+    universe_shuffled = np.random.choice(universe, size=len(universe), replace=True)
+    new_a = universe_shuffled[:len(A)]
+    new_b = universe_shuffled[len(A):]
+    return new_a, new_b
 ```
 
 ## Jackknife 
@@ -228,7 +250,16 @@ print(pval)
 
 ## Bootstrap Applied
 
-Use your code above to apply the bootstrap technique to this hypothesis testing scenario. In other words, similar to the permutation testing you performed above, compute additional samples (arbitrarily let's say 1000) of the same size as the original sample, with replacement. For each of these additional samples, compute whether the difference in sample means is the same or greater then that of the original samples. Use this to calculate an overall p-value for the null hypothesis.
+Use your code above to apply the bootstrap technique to this hypothesis testing scenario. Here's a pseudo-code outline for how to do this:
+
+1. Compute the difference between the sample means of A and B
+2. Initialize a counter for the number of times the difference of the means of resampled samples is greater then or equal to the difference of the means of the original samples
+3. Repeat the following process 10,000 times:
+    1. Use the bootstrap sampling function you used above to create new resampled versions of A and B.
+    2. Compute the difference between the means of these resampled samples.
+    3. If the difference between the means of the resampled samples is greater then or equal to the original difference, add 1 the counter you created in step 2
+4. Compute the ratio between the counter and the number of simulations (10,000) that you performed
+    > This ratio is the percentage of simulations in which the difference of sample means was greater then the original difference
 
 
 ```python
@@ -243,8 +274,7 @@ iterations = 10**4
 diff_mu_a_b = np.mean(a) - np.mean(b)
 num = 0 #Initialize numerator
 for n in range(iterations):
-    ai = bootstrap(a, len(a))
-    bi = bootstrap(b, len(b))
+    ai, bi = bootstrap(a, b)
     diff_mu_ai_bi = np.mean(ai) - np.mean(bi)
     if diff_mu_ai_bi >= diff_mu_a_b:
         num +=1
@@ -252,7 +282,7 @@ p_val = num / iterations
 print('P-value: {}'.format(p_val))
 ```
 
-    P-value: 0.5034
+    P-value: 0.9892
 
 
 ## Summary
