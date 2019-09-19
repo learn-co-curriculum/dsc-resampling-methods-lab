@@ -8,9 +8,9 @@ Now that you have some preliminary background on bootstrapping, jackknife and pe
 ## Objectives
 
 You will be able to:
-- Understand permutation testing
-- Understand what jackknife is
-- Understand what bootstrapping is
+* Understand permutation testing
+* Understand what jackknife is
+* Understand what bootstrapping is
 
 ## Bootstrap Sampling
 
@@ -282,7 +282,7 @@ p_val = num / iterations
 print('P-value: {}'.format(p_val))
 ```
 
-    P-value: 0.9892
+    P-value: 0.9879
 
 
 ## Summary
