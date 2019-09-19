@@ -8,9 +8,9 @@ Now that you have some preliminary background on bootstrapping, jackknife and pe
 ## Objectives
 
 You will be able to:
-* Understand permutation testing
-* Understand what jackknife is
-* Understand what bootstrapping is
+- Understand permutation testing
+- Understand what jackknife is
+- Understand what bootstrapping is
 
 ## Bootstrap Sampling
 
