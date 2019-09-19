@@ -12,9 +12,27 @@ You will be able to:
 * Understand what jackknife is
 * Understand what bootstrapping is
 
-## Bootstrapping
+## Bootstrap Sampling
 
-Write a function that takes a sample and generates n additional samples of the same size using bootstrapping. (Recall that bootstrapping creates additional sets by sampling with replacement.)
+
+Bootstrap sampling works by combining two distinct samples into a universal set and generating random samples from this combined sample space in order to compare these random splits to the two original samples. The idea is to see if the difference between the two **original** samples is statistically significant. If similar differences can be observed through the random generation of samples, then the observed differences are not actually significant.
+
+
+Write a function to perform bootstrap sampling. The function should take in two samples A and B. The two samples need not be the same size. From this, create a universal sample by combining A and B. Then, create a resampled universal sample of the same size using random sampling with replacement. Finally, split this randomly generated universal set into two samples which are the same size as the original samples, A and B. The function should return these resampled samples.
+
+Ex:
+
+```python
+
+A = [1,2,3]
+B = [2,2,5,6]
+
+Universal_Set = [1,2,2,2,3,5,6]
+Resampled_Universal_Set = [6, 2, 3, 2, 1, 1, 2] #Could be different (randomly generated with replacement)
+
+Resampled_A = [6,2,3]
+Resampled_B = [2,1,1,2]
+```
 
 
 ```python
@@ -42,25 +60,27 @@ Define a function that generate all possible, equally sized, two set splits of t
 
 
 Here's a more in depth example:  
-```A = [1,2,2]
-B = [1,3]
-combT(A, B) = [
-                ([1,2,2], [1,3]),
-                ([1,2,3], [1,2]),
-                ([1,2,1], [2,3])
-                ([1,1,3], [2,2]),
-                ([2,2,3], [1,1])
-              ]```  
+```python
+>>> A = [1,2,2]
+>>> B = [1,3]
+>>> combT(A, B) 
+[([1,2,2], [1,3]),
+ ([1,2,3], [1,2]),
+ ([1,2,1], [2,3]),
+ ([1,1,3], [2,2]),
+ ([2,2,3], [1,1])]
+               
+```  
 These are all the possible 3-2 member splits of the 5 elements : 1,1,2,2,3.
 
 
 ```python
-def permT(a,b):
+def comb(a,b):
     # Your code here
 ```
 
 ## Permutation Testing in Practice
-Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `permT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
+Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `combT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
 
 For example, in our small handwritten example above:
 
@@ -85,12 +105,17 @@ A standard hypothesis test for this scenario might be:
 $h_0: \mu_a = \mu_b$  
 $h_1: \mu_a < \mu_b$  
   
-Thus comparing our sample difference to the differences of our possible permutations, we look at the number of experiments from our combinations space that were the same or greater then our sample statistic, divided by the total number of permutations. In this case, 4 out of 5 of the permutation cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
+Thus comparing our sample difference to the differences of our possible combinations, we look at the number of experiments from our combinations space that were the same or greater then our sample statistic, divided by the total number of combinations. In this case, 4 out of 5 of the combination cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
 
 
 ```python
-a = []
-b = []
+a = [109.6927759 , 120.27296943, 103.54012038, 114.16555857,
+       122.93336175, 110.9271756 , 114.77443758, 116.34159338,
+       112.66413025, 118.30562665, 132.31196515, 117.99000948]
+b = [123.98967482, 141.11969004, 117.00293412, 121.6419775 ,
+       123.2703033 , 123.76944385, 105.95249634, 114.87114479,
+       130.6878082 , 140.60768727, 121.95433026, 123.11996767,
+       129.93260914, 121.01049611]
 ```
 
 
@@ -109,7 +134,16 @@ The parametric statistical test equivalent to our permutation test above would b
 
 ## Bootstrap Applied
 
-Use your code above to apply the bootstrap technique to this hypothesis testing scenario. In other words, similar to the permutation testing you performed above, compute additional samples (arbitrarily let's say 1000) of the same size as the original sample, with replacement. For each of these additional samples, compute whether the difference in sample means is the same or greater then that of the original samples. Use this to calculate an overall p-value for the null hypothesis.
+Use your code above to apply the bootstrap technique to this hypothesis testing scenario. Here's a pseudo-code outline for how to do this:
+
+1. Compute the difference between the sample means of A and B
+2. Initialize a counter for the number of times the difference of the means of resampled samples is greater then or equal to the difference of the means of the original samples
+3. Repeat the following process 10,000 times:
+    1. Use the bootstrap sampling function you used above to create new resampled versions of A and B.
+    2. Compute the difference between the means of these resampled samples.
+    3. If the difference between the means of the resampled samples is greater then or equal to the original difference, add 1 the counter you created in step 2
+4. Compute the ratio between the counter and the number of simulations (10,000) that you performed
+    > This ratio is the percentage of simulations in which the difference of sample means was greater then the original difference
 
 
 ```python
