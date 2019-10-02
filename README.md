@@ -54,7 +54,7 @@ def jack1():
 
 ## Permutation Testing
 
-Define a function that generate all possible, equally sized, two set splits of two sets A and B. Sets A and B need not be the same size, but all of the generate two set splits should be of equal size. For example, if we had a set with 5 members and a set with 7 members, the function would return all possible 5-7 ordered splits of the 12 items. 
+Define a function that generates all possible, equally sized, two set splits of two sets A and B. Sets A and B need not be the same size, but all of the generated two set splits should be of equal size. For example, if we had a set with 5 members and a set with 7 members, the function would return all possible 5-7 ordered splits of the 12 items.
 
 > Note that these are actually combinations! However, as noted previously, permutation tests really investigate possible regroupings of the data observations, so calculating combinations is a more efficient approach!
 
@@ -71,7 +71,7 @@ Here's a more in depth example:
  ([2,2,3], [1,1])]
                
 ```  
-These are all the possible 3-2 member splits of the 5 elements : 1,1,2,2,3.
+These are all the possible 3-2 member splits of the 5 elements: 1,1,2,2,3.
 
 
 ```python
@@ -105,7 +105,7 @@ A standard hypothesis test for this scenario might be:
 $h_0: \mu_a = \mu_b$  
 $h_1: \mu_a < \mu_b$  
   
-Thus comparing our sample difference to the differences of our possible combinations, we look at the number of experiments from our combinations space that were the same or greater then our sample statistic, divided by the total number of combinations. In this case, 4 out of 5 of the combination cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
+Thus comparing our sample difference to the differences of our possible combinations, we look at the number of experiments from our combinations space that were the same or greater than our sample statistic, divided by the total number of combinations. In this case, 4 out of 5 of the combination cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
 
 
 ```python
@@ -144,7 +144,7 @@ Use your code above to apply the bootstrap technique to this hypothesis testing 
     2. Compute the difference between the means of these resampled samples.
     3. If the difference between the means of the resampled samples is greater then or equal to the original difference, add 1 the counter you created in step 2
 4. Compute the ratio between the counter and the number of simulations (10,000) that you performed
-    > This ratio is the percentage of simulations in which the difference of sample means was greater then the original difference
+    > This ratio is the percentage of simulations in which the difference of sample means was greater than the original difference
 
 
 ```python
@@ -153,4 +153,4 @@ Use your code above to apply the bootstrap technique to this hypothesis testing 
 
 ## Summary
 
-Well done! In this lab you practice coding modern statistical resampling techniques of the 20th century! You also started to compare these non-parametric methods to other parametric methods such as the t-test that we previously discussed.
+Well done! In this lab, you practice coding modern statistical resampling techniques of the 20th century! You also started to compare these non-parametric methods to other parametric methods such as the t-test that we previously discussed.
