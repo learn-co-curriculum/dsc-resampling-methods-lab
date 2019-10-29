@@ -3,16 +3,17 @@
 
 ## Introduction
 
-Now that you have some preliminary background on bootstrapping, jackknife and permutation tests, its time to practice those skills by coding them into functions. You'll then apply these tests to a hypothesis test and compare the results to a parametric t-test.
+Now that you have some preliminary background on bootstrapping, jackknife, and permutation tests, its time to practice those skills by coding them into functions. You'll then apply these tests to a hypothesis test and compare the results to a parametric t-test.
 
 ## Objectives
 
-You will be able to:
-* Understand permutation testing
-* Understand what jackknife is
-* Understand what bootstrapping is
+In this lab you will: 
 
-## Bootstrap Sampling
+* Write a function to implement permutation testing    
+* Write a function to implement jackknife    
+* Write a function to implement bootstrapping 
+
+## Bootstrap sampling
 
 
 Bootstrap sampling works by combining two distinct samples into a universal set and generating random samples from this combined sample space in order to compare these random splits to the two original samples. The idea is to see if the difference between the two **original** samples is statistically significant. If similar differences can be observed through the random generation of samples, then the observed differences are not actually significant.
@@ -20,7 +21,7 @@ Bootstrap sampling works by combining two distinct samples into a universal set 
 
 Write a function to perform bootstrap sampling. The function should take in two samples A and B. The two samples need not be the same size. From this, create a universal sample by combining A and B. Then, create a resampled universal sample of the same size using random sampling with replacement. Finally, split this randomly generated universal set into two samples which are the same size as the original samples, A and B. The function should return these resampled samples.
 
-Ex:
+Example:
 
 ```python
 
@@ -28,7 +29,7 @@ A = [1,2,3]
 B = [2,2,5,6]
 
 Universal_Set = [1,2,2,2,3,5,6]
-Resampled_Universal_Set = [6, 2, 3, 2, 1, 1, 2] #Could be different (randomly generated with replacement)
+Resampled_Universal_Set = [6, 2, 3, 2, 1, 1, 2] # Could be different (randomly generated with replacement)
 
 Resampled_A = [6,2,3]
 Resampled_B = [2,1,1,2]
@@ -51,7 +52,7 @@ def bootstrap(A, B):
 
 ## Jackknife 
 
-Write a function that creates additional samples by removing one element at a time. The function should do this for each of the n items in the original sample, returning n samples, each with n-1 members.
+Write a function that creates additional samples by removing one element at a time. The function should do this for each of the `n` items in the original sample, returning `n` samples, each with `n-1` members.
 
 
 ```python
@@ -65,18 +66,19 @@ def jack1(sample):
     return samples
 ```
 
-## Permutation Testing
+## Permutation testing
 
 Define a function that generates all possible, equally sized, two set splits of two sets A and B. Sets A and B need not be the same size, but all of the generated two set splits should be of equal size. For example, if we had a set with 5 members and a set with 7 members, the function would return all possible 5-7 ordered splits of the 12 items.
 
 > Note that these are actually combinations! However, as noted previously, permutation tests really investigate possible regroupings of the data observations, so calculating combinations is a more efficient approach!
 
 
-Here's a more in depth example:  
+Here's a more in depth example:
+
 ```python
->>> A = [1,2,2]
->>> B = [1,3]
->>> combT(A, B) 
+A = [1, 2, 2]
+B = [1, 3]
+combT(A, B) 
 [([1,2,2], [1,3]),
  ([1,2,3], [1,2]),
  ([1,2,1], [2,3]),
@@ -84,7 +86,8 @@ Here's a more in depth example:
  ([2,2,3], [1,1])]
                
 ```  
-These are all the possible 3-2 member splits of the 5 elements: 1,1,2,2,3.
+
+These are all the possible 3-2 member splits of the 5 elements: 1, 1, 2, 2, 3. 
 
 
 ```python
@@ -101,7 +104,7 @@ def combT(a, b):
     return all_combs
 ```
 
-## Permutation Testing in Practice
+## Permutation testing in Practice
 Let's further investigate the scenario proposed in the previous lesson. Below are two samples A and B. The samples are mock data for the blood pressure of sample patients. The research study is looking to validate whether there is a statistical difference in the blood pressure of these two groups using a 5% significance level.  First, calculate the mean blood pressure of each of the two samples. Then, calculate the difference of these means. From there, use your `combT()` function, defined above, to generate all the possible combinations of the entire sample data into A-B splits of equivalent sizes as the original sets. For each of these combinations, calculate the mean blood pressure of the two groups and record the difference between these sample means. The full collection of the difference in means between these generated samples will serve as the denominator to calculate the p-value associated with the difference between the original sample means.
 
 For example, in our small handwritten example above:
@@ -162,7 +165,7 @@ print(comb(n_items, sample_size))
 diff_mu_a_b = np.mean(a) - np.mean(b)
 combos = combT(a, b)
 print("There are {} possible sample variations.".format(len(combos)))
-num = 0 #Initialize numerator
+num = 0 # Initialize numerator
 for ai, bi in combos:
     diff_mu_ai_bi = np.mean(ai) - np.mean(bi)
     if diff_mu_ai_bi >= diff_mu_a_b:
@@ -175,7 +178,7 @@ print('P-value: {}'.format(p_val))
     P-value: 0.9890762811021258
 
 
-## T-test Revisited
+## T-test revisited
 
 The parametric statistical test equivalent to our permutation test above would be a t-test of the two groups. Perform a t-test on the same data above in order to calculate the p-value. How does this compare to the above results?
 
@@ -198,15 +201,15 @@ print(pval)
     0.6196331755824978
 
 
-## Bootstrap Applied
+## Bootstrap applied
 
 Use your code above to apply the bootstrap technique to this hypothesis testing scenario. Here's a pseudo-code outline for how to do this:
 
 1. Compute the difference between the sample means of A and B
 2. Initialize a counter for the number of times the difference of the means of resampled samples is greater then or equal to the difference of the means of the original samples
 3. Repeat the following process 10,000 times:
-    1. Use the bootstrap sampling function you used above to create new resampled versions of A and B.
-    2. Compute the difference between the means of these resampled samples.
+    1. Use the bootstrap sampling function you used above to create new resampled versions of A and B 
+    2. Compute the difference between the means of these resampled samples 
     3. If the difference between the means of the resampled samples is greater then or equal to the original difference, add 1 the counter you created in step 2
 4. Compute the ratio between the counter and the number of simulations (10,000) that you performed
     > This ratio is the percentage of simulations in which the difference of sample means was greater than the original difference
