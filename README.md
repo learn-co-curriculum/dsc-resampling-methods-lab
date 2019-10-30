@@ -9,9 +9,7 @@ Now that you have some preliminary background on bootstrapping, jackknife, and p
 
 In this lab you will: 
 
-* Write a function to implement permutation testing    
-* Write a function to implement jackknife    
-* Write a function to implement bootstrapping 
+* Create functions that perform resampling techniques and use them on datasets
 
 ## Bootstrap sampling
 
@@ -151,8 +149,8 @@ In comparison, for our various combinations we have:
 
 A standard hypothesis test for this scenario might be:
 
-$h_0: \mu_a = \mu_b$  
-$h_1: \mu_a < \mu_b$  
+$H_0: \mu_a = \mu_b$  
+$H_1: \mu_a < \mu_b$  
   
 Thus comparing our sample difference to the differences of our possible combinations, we look at the number of experiments from our combinations space that were the same or greater than our sample statistic, divided by the total number of combinations. In this case, 4 out of 5 of the combination cases produced the same or greater differences in the two sample means. This value .8 is a strong indication that we cannot refute the null hypothesis for this instance.
 
