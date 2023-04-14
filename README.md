@@ -1,4 +1,3 @@
-
 # Resampling Methods - Lab
 
 ## Introduction
@@ -96,7 +95,7 @@ B = [1, 3]
 combT(A, B) 
 [([1,2,2], [1,3]),
  ([1,2,3], [1,2]),
- ([1,2,1], [2,3]),
+ ([1,1,2], [2,3]),
  ([1,1,3], [2,2]),
  ([2,2,3], [1,1])]
                
@@ -137,14 +136,14 @@ $\mu_b = \frac{1+3}{2} = \frac{4}{2} = 2$
 
 Giving us
 
-$\mu_a - \mu_b = \frac{5}{3} - 2 = \frac{1}{2}$
+$\mu_a - \mu_b = \frac{5}{3} - 2 = -\frac{1}{3}$
 
 In comparison, for our various combinations we have:
 
-([1,2,2], [1,3]):  $\mu_a - \mu_b = \frac{5}{3} - 2 = \frac{1}{2}$  
+([1,2,2], [1,3]):  $\mu_a - \mu_b = \frac{5}{3} - 2 = -\frac{1}{3}$  
 ([1,2,3], [1,2]):  $\mu_a - \mu_b = 2 - \frac{3}{2} = \frac{1}{2}$  
 ([1,2,1], [2,3]):  $\mu_a - \mu_b = \frac{4}{3} - \frac{5}{3} = -\frac{1}{2}$  
-([1,1,3], [2,2]):  $\mu_a - \mu_b = \frac{5}{3} - 2 = \frac{1}{2}$  
+([1,1,3], [2,2]):  $\mu_a - \mu_b = \frac{5}{3} - 2 = -\frac{1}{3}$  
 ([2,2,3], [1,1]):  $\mu_a - \mu_b = \frac{7}{3} - 1 = \frac{4}{3}$  
 
 A standard hypothesis test for this scenario might be:
@@ -255,11 +254,11 @@ print(pval)
 Use your code above to apply the bootstrap technique to this hypothesis testing scenario. Here's a pseudo-code outline for how to do this:
 
 1. Compute the difference between the sample means of A and B
-2. Initialize a counter for the number of times the difference of the means of resampled samples is greater than or equal to the difference of the means of the original samples
+2. Initialize a counter for the number of times the difference of the means of resampled samples is greater then or equal to the difference of the means of the original samples
 3. Repeat the following process 10,000 times:
     1. Use the bootstrap sampling function you used above to create new resampled versions of A and B 
     2. Compute the difference between the means of these resampled samples 
-    3. If the difference between the means of the resampled samples is greater than or equal to the original difference, add 1 the counter you created in step 2
+    3. If the difference between the means of the resampled samples is greater then or equal to the original difference, add 1 the counter you created in step 2
 4. Compute the ratio between the counter and the number of simulations (10,000) that you performed
     > This ratio is the percentage of simulations in which the difference of sample means was greater than the original difference
 
